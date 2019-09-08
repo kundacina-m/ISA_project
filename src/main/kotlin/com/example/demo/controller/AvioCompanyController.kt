@@ -23,7 +23,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/aviocompanies"])
+@RequestMapping(value = ["aviocompanies"])
 class AvioCompanyController {
 
     @Autowired
@@ -53,8 +53,8 @@ class AvioCompanyController {
             return ResponseEntity(responseCompanies, HttpStatus.OK)
         }
 
-    @RequestMapping(value = ["/allOurTickets"], method = [RequestMethod.GET])
-    fun getAllOurTickets(request: HttpServletRequest): ResponseEntity<List<TicketDTO>> {
+    @RequestMapping(value = ["/allNonResTickets"], method = [RequestMethod.GET])
+    fun getAllNonReservedTickets(request: HttpServletRequest): ResponseEntity<List<TicketDTO>> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -79,8 +79,8 @@ class AvioCompanyController {
         return ResponseEntity(responseTickets, HttpStatus.OK)
     }
 
-    @RequestMapping(value = ["/allOurTicketsAll"], method = [RequestMethod.GET])
-    fun getAllOurTicketsAll(request: HttpServletRequest): ResponseEntity<List<TicketDTO>> {
+    @RequestMapping(value = ["/allTickets"], method = [RequestMethod.GET])
+    fun getAllTickets(request: HttpServletRequest): ResponseEntity<List<TicketDTO>> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -104,6 +104,9 @@ class AvioCompanyController {
 
         return ResponseEntity(responseTickets, HttpStatus.OK)
     }
+
+
+    // TODO Check this out
 
     @RequestMapping(value = ["/allNotMine"], method = [RequestMethod.GET])
     fun getAllAvioCompaniesNotMine(request: HttpServletRequest): ResponseEntity<List<LocationDTO>> {
@@ -140,7 +143,7 @@ class AvioCompanyController {
     }
 
     @Transactional
-    @RequestMapping(value = ["/remove"], method = [RequestMethod.PUT])
+    @RequestMapping(value = ["/removeLocation"], method = [RequestMethod.PUT])
     fun removeLocation(request: HttpServletRequest, @RequestBody locationDTO: LocationDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
@@ -214,8 +217,8 @@ class AvioCompanyController {
         return Response.ok()
     }
 
-    @RequestMapping(value = ["/changeAvio"], method = [RequestMethod.PUT])
-    fun changeAvioInfo(request: HttpServletRequest, @RequestBody avioCompanyDTO: AvioCompanyDTO): ResponseEntity<AvioCompanyDTO> {
+    @RequestMapping(value = ["/changeInfo"], method = [RequestMethod.PUT])
+    fun changeCompanyInfo(request: HttpServletRequest, @RequestBody avioCompanyDTO: AvioCompanyDTO): ResponseEntity<AvioCompanyDTO> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -255,8 +258,8 @@ class AvioCompanyController {
         return ResponseEntity(avioCompany.toDTO(), HttpStatus.OK)
     }
 
-    @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
-    fun addAvio(request: HttpServletRequest, @RequestBody avioCompanyDTO: AvioCompanyDTO): ResponseEntity<Void> {
+    @RequestMapping(value = ["/addCompany"], method = [RequestMethod.POST])
+    fun addAvioCompany(request: HttpServletRequest, @RequestBody avioCompanyDTO: AvioCompanyDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())

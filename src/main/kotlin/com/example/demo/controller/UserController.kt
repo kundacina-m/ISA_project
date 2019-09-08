@@ -28,7 +28,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/users"])
+@RequestMapping(value = ["users"])
 class UserController {
 
     @Autowired
@@ -45,22 +45,21 @@ class UserController {
     @Autowired
     private lateinit var avioService: AvioCompanyService
 
-    internal var errors: Map<String, String>? = null
 
     val allUsers: ResponseEntity<List<UserDTO>>
         @RequestMapping(value = ["/all"], method = [RequestMethod.GET])
         get() {
 
-            val usersDTO = ArrayList<UserDTO>()
+            val responseUsers = ArrayList<UserDTO>()
 
-            service.findAll().forEach { usersDTO.add(it.toDTO()) }
+            service.findAll().forEach { responseUsers.add(it.toDTO()) }
 
-            return ResponseEntity(usersDTO, HttpStatus.OK)
+            return ResponseEntity(responseUsers, HttpStatus.OK)
         }
 
     @RequestMapping(value = ["/completeRegister"], method = [RequestMethod.GET])
     @Throws(IOException::class)
-    fun CompleteRegistration(token: String, httpServletResponse: HttpServletResponse): ResponseEntity<Void> {
+    fun completeRegistration(token: String, httpServletResponse: HttpServletResponse): ResponseEntity<Void> {
 
         val verificationToken = verificationTokenService.findByToken(token)
 
@@ -88,7 +87,7 @@ class UserController {
             email = userDTO.email
         )
 
-        val user = service.save(temp)
+        service.save(temp)
 
         // TODO OVDJE ERROR
 //        service.completeRegistration(user.username!!)
@@ -96,14 +95,14 @@ class UserController {
     }
 
     @Transactional
-    @RequestMapping(method = [RequestMethod.DELETE], value = ["/{username}"])
-    fun deleteUser(@PathVariable username: String): ResponseEntity<EmptyResponse> =
+    @RequestMapping(method = [RequestMethod.DELETE], value = ["/remove/{username}"])
+    fun removeUser(@PathVariable username: String): ResponseEntity<EmptyResponse> =
 
         try {
             service.remove(username)
-            Response.ok<EmptyResponse>()
+            Response.ok()
         } catch (e: Exception) {
-            Response.notFound<EmptyResponse>()
+            Response.notFound()
         }
 
 
@@ -114,33 +113,34 @@ class UserController {
         return service.getUser(user.name)!!
     }
 
-    @RequestMapping(value = ["/changeAuth"], method = [RequestMethod.PUT])
+    @RequestMapping(value = ["/changeAuthority"], method = [RequestMethod.PUT])
     fun changeAuthority(request: HttpServletRequest, @RequestBody userDTO: UserDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
         } ?: return Response.unauthorized()
 
-        val admin = service.getUser(username) ?: return Response.unauthorized()
+        val admin = service.getUser(username)
+            ?: return Response.unauthorized()
 
         var validAuthority = false
 
-        for (a in admin.authorities!!)
-            if (a.name.equals("ADMIN")) {
+        admin.authorities?.forEach {
+            if (it.name.equals("ADMIN")) {
                 validAuthority = true
-                break
+                return@forEach
             }
-
-        if (!validAuthority) {
-            return Response.unauthorized()
         }
 
-        val user = service.getUser(userDTO.username!!) ?: return Response.unauthorized()
-        println(user.username)
+        if (!validAuthority) return Response.unauthorized()
+
+        val user = service.getUser(userDTO.username!!)
+            ?: return Response.unauthorized()
 
         val auth = user.authorities?.toMutableList()
-        for (au in userDTO.authority!!) {
-            auth?.add(authService.findByName(au.name!!))
+
+        userDTO.authority?.forEach {
+            auth?.add(authService.findByName(it.name!!))
         }
 
         user.setAuthorities(auth!!)
@@ -150,8 +150,8 @@ class UserController {
         return Response.ok()
     }
 
-    @RequestMapping(value = ["/delAuth"], method = [RequestMethod.POST])
-    fun dellAuthority(request: HttpServletRequest, @RequestBody userDTO: UserDTO): ResponseEntity<Void> {
+    @RequestMapping(value = ["/removeAuthority"], method = [RequestMethod.POST])
+    fun removeAuthority(request: HttpServletRequest, @RequestBody userDTO: UserDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -161,35 +161,34 @@ class UserController {
 
         var validAuthority = false
 
-        for (a in admin.authorities!!)
-            if (a.name.equals("ADMIN")) {
+        admin.authorities?.forEach {
+            if (it.name.equals("ADMIN")) {
                 validAuthority = true
-                break
+                return@forEach
             }
-
-        if (!validAuthority) {
-            return Response.unauthorized()
         }
+
+        if (!validAuthority) return Response.unauthorized()
+
 
         val user = service.getUser(userDTO.username!!) ?: return Response.notFound()
 
         val auth = user.authorities?.toMutableList()
-        for (au in userDTO.authority!!) {
-            val index = auth?.indexOf(authService.findByName(au.name!!))
+
+        userDTO.authority?.forEach {
+            val index = auth?.indexOf(authService.findByName(it.name!!))
             auth?.removeAt(index!!)
         }
-        for (a in auth!!) {
-            println(a.name)
-        }
-        user.setAuthorities(auth)
+
+        user.setAuthorities(auth?.toList()!!)
 
         service.saveWithoutEncode(user)
 
         return Response.ok()
     }
 
-    @RequestMapping(value = ["/changePriv"], method = [RequestMethod.PUT])
-    fun addPriv(request: HttpServletRequest, @RequestBody userDTO: UserDTO): ResponseEntity<Void> {
+    @RequestMapping(value = ["/setRole"], method = [RequestMethod.PUT])
+    fun setRole(request: HttpServletRequest, @RequestBody userDTO: UserDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -210,7 +209,7 @@ class UserController {
         }
 
         val user = service.getUser(userDTO.username!!) ?: return Response.notFound()
-        println(user.username)
+
         val av = avioService.findByName(userDTO.name!!)
 
         if (av != null) {

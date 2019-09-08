@@ -21,7 +21,7 @@ import javax.transaction.Transactional
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/tickets"])
+@RequestMapping(value = ["tickets"])
 class TicketController {
 
     @Autowired
@@ -42,18 +42,18 @@ class TicketController {
     val allTickets: ResponseEntity<List<TicketDTO>>
         @RequestMapping(value = ["/all"], method = [RequestMethod.GET])
         get() {
-            val tickets = service.findAll()
-            val ticketsDTO = ArrayList<TicketDTO>()
 
-            for (t in tickets) {
-                ticketsDTO.add(t.toDTO())
+            val responseTickets = ArrayList<TicketDTO>()
+
+            service.findAll().forEach { ticket ->
+                responseTickets.add(ticket.toDTO())
             }
 
-            return ResponseEntity(ticketsDTO, HttpStatus.OK)
+            return ResponseEntity(responseTickets, HttpStatus.OK)
         }
 
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
-    fun removeTicket(request: HttpServletRequest, @RequestBody ticketDTO: TicketDTO): ResponseEntity<Void> {
+    fun addTicket(request: HttpServletRequest, @RequestBody ticketDTO: TicketDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -61,7 +61,7 @@ class TicketController {
 
         val admin = userService.getUser(username) ?: return Response.unauthorized()
 
-        val avioCompany = avioService.findByName(admin.avioCompany?.name!!)
+        avioService.findByName(admin.avioCompany?.name!!)
             ?: return Response.unauthorized()
 
 
@@ -91,7 +91,7 @@ class TicketController {
         val admin = userService.getUser(username)
             ?: return Response.unauthorized()
 
-        val avioCompany = avioService.findByName(admin.avioCompany?.name!!)
+        avioService.findByName(admin.avioCompany?.name!!)
             ?: return Response.unauthorized()
 
 
@@ -109,7 +109,7 @@ class TicketController {
 
         val admin = userService.getUser(username) ?: return Response.unauthorized()
 
-        val avioCompany = avioService.findByName(admin.avioCompany?.name!!)
+        avioService.findByName(admin.avioCompany?.name!!)
             ?: return Response.unauthorized()
 
         val ticket = service.findById(ticketDTO.id) ?: return Response.notFound()

@@ -20,7 +20,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/flights"])
+@RequestMapping(value = ["flights"])
 class FlightController {
 
     @Autowired
@@ -50,8 +50,8 @@ class FlightController {
             return ResponseEntity(flightsDTO, HttpStatus.OK)
         }
 
-    @RequestMapping(value = ["/allOur"], method = [RequestMethod.GET])
-    fun getOurFlights(request: HttpServletRequest): ResponseEntity<List<FlightDTO>> {
+    @RequestMapping(value = ["/allCompany"], method = [RequestMethod.GET])
+    fun getAllCompanyFlights(request: HttpServletRequest): ResponseEntity<List<FlightDTO>> {
 
 
         val username = with(tokenUtils) {

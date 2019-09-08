@@ -20,7 +20,7 @@ import java.util.*
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/reservations"])
+@RequestMapping(value = ["reservations"])
 class ReservationController {
 
     @Autowired
@@ -41,7 +41,7 @@ class ReservationController {
     @Autowired
     private lateinit var reservationTokenService: ReservationTokenService
 
-    val allReservation: ResponseEntity<List<ReservationDTO>>
+    val allReservations: ResponseEntity<List<ReservationDTO>>
         @RequestMapping(value = ["/all"], method = [RequestMethod.GET])
         get() {
             val reservationsResponse = ArrayList<ReservationDTO>()
@@ -53,8 +53,8 @@ class ReservationController {
             return ResponseEntity(reservationsResponse, HttpStatus.OK)
         }
 
-    @RequestMapping(value = ["/reserveFlight"], method = [RequestMethod.POST])
-    fun reserveFlight(request: HttpServletRequest, @RequestBody ticketsDTO: Set<TicketDTO>): ResponseEntity<Void> {
+    @RequestMapping(value = ["/reserve"], method = [RequestMethod.POST])
+    fun reserveFlight(request: HttpServletRequest, @RequestBody ticketsRequest: Set<TicketDTO>): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -63,15 +63,14 @@ class ReservationController {
         val me = userService.getUser(username) ?: return Response.unauthorized()
         val tickets = HashSet<Ticket>()
 
-        for (ticketDTO in ticketsDTO) {
-            println("CCCCCCCCCCCCCC " + ticketDTO.passengerUsername)
-            val ticket = ticketService.findById(ticketDTO.id)
+        ticketsRequest.forEach { ticketRequested ->
+            val ticket = ticketService.findById(ticketRequested.id)
                 ?: return Response.notFound()
 
-            ticket.passengerLastName = ticketDTO.passengerLastName
-            ticket.passengerName = ticketDTO.passengerName
-            ticket.passengerUsername = ticketDTO.passengerUsername
-            ticket.passportNumber = ticketDTO.passportNumber
+            ticket.passengerLastName = ticketRequested.passengerLastName
+            ticket.passengerName = ticketRequested.passengerName
+            ticket.passengerUsername = ticketRequested.passengerUsername
+            ticket.passportNumber = ticketRequested.passportNumber
             ticket.isReserved = true
 
 
@@ -90,7 +89,6 @@ class ReservationController {
 
         reservation.tickets = temp.toSet()
 
-        println("RESERVATION TICKET SIZE " + reservation.tickets.size)
         reservationService.save(reservation)
 
         try {
@@ -99,24 +97,19 @@ class ReservationController {
             println("Greska prilikom slanja emaila: " + e.message)
         }
 
-        for (ticket in reservation.tickets) {
+        reservation.tickets.forEach { ticket ->
             if (ticket.passengerUsername != null)
-                if (!ticket.passengerUsername.equals(username)) {
-                    println("passenger username " + ticket.passengerUsername)
-                    println("passenger ticket size " + reservation.tickets.size)
+                if (!ticket.passengerUsername.equals(username))
                     acceptReservation(reservation.id, ticket.passengerUsername!!)
-                }
+
         }
-        val res = reservationService.findById(reservation.id)
-        println("NANIIIIIII " + res.tickets.size)
+
         return Response.created()
     }
 
     fun acceptReservation(reservationId: Int?, username: String) {
 
         val user = userService.getUser(username) ?: return
-
-        println("BBBBBB $username")
 
         val uuid = UUID.randomUUID().toString()
 
@@ -132,8 +125,6 @@ class ReservationController {
         val reservation = reservationService.findById(token1.reservation)
 
 
-        println("NANIIIII OPET : " + reservation.tickets.size)
-
         try {
             emailService.sendMailFlightReservationAccept(user, reservation, uuid)
         } catch (e: Exception) {
@@ -147,20 +138,12 @@ class ReservationController {
         val reservationToken = reservationTokenService.findByToken(token)
         val username = reservationToken.username
 
-        println("aj molim te $token")
-        println("gggggg " + reservationToken.reservation)
-
         val reservation = reservationService.findById(reservationToken.reservation)
-
-        println("AAAAAAAAAAAAAAAAAAA " + reservation.tickets.size)
 
         var friendTicket: Ticket
 
-        for (ticket in reservation.tickets) {
-            println(ticket.passengerUsername)
-            println("USERNAME $username")
+        reservation.tickets.forEach { ticket ->
             if (ticket.passengerUsername.equals(username)) {
-                println("USAO OVDE")
                 friendTicket = ticket
                 friendTicket.passengerLastName = null
                 friendTicket.passengerName = null

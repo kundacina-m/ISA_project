@@ -15,20 +15,16 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/locations"])
+@RequestMapping(value = ["locations"])
 class LocationController {
 
     @Autowired
     private lateinit var locationService: LocationService
 
     @Autowired
-    private lateinit var userService: UserService
-
-    @Autowired
     internal lateinit var tokenUtils: TokenUtils
 
-    // TODO wtf again
-    val allFlights: ResponseEntity<List<LocationDTO>>
+    val allLocations: ResponseEntity<List<LocationDTO>>
         @RequestMapping(value = ["/all"], method = [RequestMethod.GET])
         get() {
 

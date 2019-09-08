@@ -13,7 +13,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/authority"])
+@RequestMapping(value = ["authority"])
 class AuthorityController {
 
     @Autowired

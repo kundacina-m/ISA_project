@@ -27,7 +27,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/auth"])
+@RequestMapping(value = ["auth"])
 class AuthenticationController {
 
     @Autowired
@@ -136,15 +136,12 @@ class AuthenticationController {
         return ResponseEntity(user.toDTO(), HttpStatus.OK)
     }
 
-    @RequestMapping(value = ["/change-password"], method = [RequestMethod.POST])
+    @RequestMapping(value = ["/changePassword"], method = [RequestMethod.POST])
     fun changePassword(@RequestBody passwordChanger: PasswordChanger, request: HttpServletRequest): ResponseEntity<EmptyResponse> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
         } ?: return Response.unauthorized()
-
-        println(passwordChanger.newPassword)
-        println(passwordChanger.oldPassword)
 
         userDetailsService.changePassword(passwordChanger.oldPassword!!, passwordChanger.newPassword!!, username)
 

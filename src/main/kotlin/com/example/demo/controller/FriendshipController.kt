@@ -19,7 +19,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["api/friendships"])
+@RequestMapping(value = ["friendships"])
 class FriendshipController {
 
     @Autowired
@@ -32,9 +32,8 @@ class FriendshipController {
     internal lateinit var tokenUtils: TokenUtils
 
 
-    // TODO check wtf is this
-    @RequestMapping(value = ["/all"], method = [RequestMethod.GET])
-    fun getAllFlights(request: HttpServletRequest): ResponseEntity<List<FriendshipDTO>> {
+    @RequestMapping(value = ["/allFriendships"], method = [RequestMethod.GET])
+    fun getAllFriendships(request: HttpServletRequest): ResponseEntity<List<FriendshipDTO>> {
         val friendsResponse = ArrayList<FriendshipDTO>()
 
         friendshipService.findAll().forEach {
@@ -43,8 +42,8 @@ class FriendshipController {
         return ResponseEntity(friendsResponse, HttpStatus.OK)
     }
 
-    @RequestMapping(value = ["/friends"], method = [RequestMethod.GET])
-    fun getAllFriends(request: HttpServletRequest): ResponseEntity<List<String>> {
+    @RequestMapping(value = ["/allMyFriends"], method = [RequestMethod.GET])
+    fun getAllMyFriends(request: HttpServletRequest): ResponseEntity<List<String>> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -126,8 +125,8 @@ class FriendshipController {
         return Response.ok()
     }
 
-    @RequestMapping(value = ["/friendRequests"], method = [RequestMethod.GET])
-    fun getRequests(request: HttpServletRequest): ResponseEntity<List<FriendshipDTO>> {
+    @RequestMapping(value = ["/requests"], method = [RequestMethod.GET])
+    fun getFriendRequests(request: HttpServletRequest): ResponseEntity<List<FriendshipDTO>> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
