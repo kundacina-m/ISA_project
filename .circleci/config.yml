@@ -33,7 +33,6 @@ jobs:
           name: Install MySQL CLI; Import dummy data; run an example query
           command: |
             sudo apt-get install default-mysql-client
-            mysql -h 127.0.0.1 -u root -p root test_db < resources/data.sql
 
 
       - run:
