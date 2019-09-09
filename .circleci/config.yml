@@ -14,3 +14,15 @@ jobs:
       - run:
           name: Print the Current Time
           command: date
+
+      - run:
+          name: Build and test
+          command: ./gradlew test
+
+      - store_test_results:
+          path: target/test-reports
+
+      - store_artifacts:
+          path: /tmp/standalone-app.jar
+      - store_artifacts:
+          path: /tmp/cf-dev-manifest.yml
