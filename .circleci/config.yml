@@ -9,10 +9,10 @@ jobs:
       # Configure the JVM and Gradle to avoid OOM errors
       _JAVA_OPTIONS: "-Xmx3g"
       GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
-      MYSQL_ROOT_PASSWORD: root
-        MYSQL_DATABASE: test_db
-        MYSQL_USER: root
-        MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "test_db"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
 
     steps:
       - checkout
