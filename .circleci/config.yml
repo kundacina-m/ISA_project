@@ -21,7 +21,9 @@ jobs:
 
       - run:
           name: Build and test
-          command: ./gradlew test
+          command: ./gradlew clean |
+            rm -rf ~/.gradle/caches/* |
+            ./gradlew test
 
       - store_test_results:
           path: build/test-results/test
