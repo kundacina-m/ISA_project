@@ -3,13 +3,12 @@ jobs:
   build:
     docker:
       - image: circleci/openjdk:8-jdk
-          environment:
-            MYSQL_DATABASE: "jdbc"
-            MYSQL_HOST: "127.0.0.1"
-      - image: circleci/mysql:5.7
-
+      - image: circleci/mysql:8.0.4
 
     environment:
+      # Configure the JVM and Gradle to avoid OOM errors
+      _JAVA_OPTIONS: "-Xmx3g"
+      GRADLE_OPTS: "-Dorg.gradle.daemon=false -Dorg.gradle.workers.max=2"
       MYSQL_DATABASE: "jdbc"
       MYSQL_HOST: "127.0.0.1"
       MYSQL_ALLOW_EMPTY_PASSWORD: yes
@@ -19,9 +18,24 @@ jobs:
       - checkout
 
       - run:
+          # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 10`;
+            do
+            nc -z 127.0.0.1 3306 && echo Success && exit 0
+            echo -n .
+            sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+
+      - run:
+          name: Install MySQL CLI; Import dummy data; run an example query
           command: |
             dockerize -wait tcp://127.0.0.1:3306 -timeout 120s
-            mysql -h 127.0.0.1 -u root -proot < data.sql
+            sudo apt-get install default-mysql-client
+            mysql -h 127.0.0.1 -u root -proot test_db < data.sql
+
 
       - run:
           name: Greeting
