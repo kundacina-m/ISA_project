@@ -2,8 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: debian:stretch
-
+      - image: circleci/openjdk:8-jdk
     environment:
       # Configure the JVM and Gradle to avoid OOM errors
       _JAVA_OPTIONS: "-Xmx3g"
@@ -25,9 +24,7 @@ jobs:
           command: ./gradlew test
 
       - store_test_results:
-          path: target/test-reports
-
+          path: build/test-results/test
       - store_artifacts:
-          path: /tmp/standalone-app.jar
-      - store_artifacts:
-          path: /tmp/cf-dev-manifest.yml
+          path: build/test-results/test
+          when: always
