@@ -4,6 +4,9 @@ jobs:
     docker:
       - image: debian:stretch
 
+    environment:
+      JVM_OPTS: -Xmx3200m
+
     steps:
       - checkout
 
