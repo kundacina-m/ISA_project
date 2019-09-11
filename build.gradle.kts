@@ -42,7 +42,7 @@ dependencies {
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("mysql:mysql-connector-java")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("org.springframework.com.example.demo.security:spring-com.example.demo.security-test")
+//	testImplementation("org.springframework.com.example.demo.security:spring-com.example.demo.security-test")
 
 	implementation("org.glassfish.corba:glassfish-corba-omgapi:4.2.0-b001")
 }
