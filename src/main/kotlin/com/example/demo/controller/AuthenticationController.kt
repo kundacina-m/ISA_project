@@ -27,7 +27,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["auth"])
+@RequestMapping(value = ["api/auth"])
 class AuthenticationController {
 
     @Autowired
@@ -45,10 +45,12 @@ class AuthenticationController {
     @RequestMapping(method = [RequestMethod.GET], value = ["/profile"], produces = ["application/json"])
     fun getProfile(request: HttpServletRequest): ResponseEntity<UserDTO> {
 
+        println(request.getHeader("Authorization"))
+
         with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
         }?.let {
-            return ResponseEntity(userDetailsService.getUser(it)?.toDTO(), HttpStatus.OK)
+            return ResponseEntity(userDetailsService.getUser(it)?.toDTO()!!, HttpStatus.OK)
         } ?: return Response.unauthorized()
 
     }
@@ -94,22 +96,13 @@ class AuthenticationController {
                     authenticationRequest.password)
                 )
 
-
-            // TODO check why this is null
-
-            println("authorities " + authentication.authorities)
-            println("credentials " + authentication.credentials)
-            // Ubaci username + password u kontext
             SecurityContextHolder.getContext().authentication = authentication
-
-            println("com.example.demo.security context " + SecurityContextHolder.getContext().authentication.credentials)
 
             // Kreiraj token
             val user = authentication.principal as User
             val jwt = tokenUtils.generateToken(user.username!!)
             val expiresIn = tokenUtils.expiredIn
 
-            // Vrati token kao odgovor na uspesno autentifikaciju
             return ResponseEntity.ok(UserTokenState(jwt, expiresIn.toLong()))
         } catch (e: BadCredentialsException) {
             return Response.unauthorized<EmptyResponse>()

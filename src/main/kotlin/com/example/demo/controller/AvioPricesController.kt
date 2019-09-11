@@ -17,7 +17,7 @@ import javax.transaction.Transactional
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["avioPrices"])
+@RequestMapping(value = ["api/avioprices/"])
 class AvioPricesController {
 
     @Autowired

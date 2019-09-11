@@ -11,7 +11,7 @@ data class FlightDTO(
     var flightTime: Int = 0,
     var ticketPrice: Double = 0.toDouble(),
     var connectedCities: MutableSet<LocationDTO> = HashSet(),
-    var locationDTO: LocationDTO? = null,
+    var destination: LocationDTO? = null,
     var companyDTO: AvioCompanyDTO? = null,
     var version: Long? = null
 )

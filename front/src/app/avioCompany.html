@@ -1,0 +1,120 @@
+<section class="home-slider owl-carousel">
+  <div class="slider-item" style="background-image: url('../assets/animate.gif');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row slider-text align-items-center">
+        <div class="col-md-7 col-sm-12 ftco-animate">
+          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Home</a></span> <span>AvioCompany</span></p>
+          <h1 class="mb-3">AvioCompany</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- END slider -->
+<div class="marg">
+<div class="ftco-section-search">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12 tabulation-search">
+        <div class="element-animate">
+          <div class="nav nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+            <a class="nav-link p-3 active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true"><span>01</span> Flight</a>
+          </div>
+        </div>
+
+        <div class="tab-content py-5" id="v-pills-tabContent">
+          <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+            <div class="block-17">
+              <form (submit)="searchFlight($event)" class="d-block d-lg-flex">
+                <div class="fields d-block d-lg-flex">
+                  <div class="text-field one-third-1"><input type="text" id="dest" class="form-control" placeholder="Destination Aerodrom"></div>
+                  <div><input type="datetime-local" id="checkin_date1" class="form-control" placeholder="Departure"></div>
+                  <div><input type="datetime-local" id="checkout_date2" class="form-control" placeholder="Arrival"></div>
+                </div>
+                <input type="submit" class="search-submit btn btn-primary" value="Find Flights">
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<form (submit)="chooseFlight($event)">
+  <div class="row setup-content">
+    <div class="col-xs-6 col-md-offset-3">
+      <div class="col-md-12">
+        <h3> Search flights</h3>
+        <div class="form-group">
+          <p>Fliter by:</p>
+          <form (submit)="Sort($event)">
+            Company:
+          <select id="FilterByAvio">
+            <option value=""></option>
+            <option *ngFor="let filt of letovi2" value="{{filt.companyDTO.name}}">{{filt.companyDTO.name}}</option>
+          </select>
+            Time:
+          <select id="FilterByTime">
+            <option value=""></option>
+            <option *ngFor="let filt of letovi2" value="{{filt.flightTime}}">{{filt.flightTime}}</option>
+          </select>
+            Price:
+          <select id="FilterByPrice">
+            <option value=""></option>
+            <option *ngFor="let filt of letovi2" value="{{filt.ticketPrice}}">{{filt.ticketPrice}}</option>
+          </select>
+          <button type="submit">Filter</button>
+          </form>
+          <table class="table" style="border: 1px solid">
+            <thead class="table-dark text-white">
+            <tr>
+              <td align="center"></td>
+              <td align="center"><b>Company Name</b></td>
+              <td align="center"><b>Destination Time</b></td>
+              <td align="center"><b>Arrival Time</b></td>
+              <td align="center"><b>Connected Cities</b></td>
+              <td align="center"><b>Total flight time</b></td>
+              <td align="center"><b>Ticket price</b></td>
+              <td align="center"><b>Chosen</b></td>
+            </tr>
+            </thead>
+            <tr *ngFor="let fl of letovi">
+              <td align="center"><img src="../assets/avioCompany/{{fl.companyDTO.image}}" width="50" height="50"/>
+              </td>
+              <td align="center">{{fl.companyDTO.name}}</td>
+              <td align="center">{{fl.departureTime | date : 'dd-MM-yyyy hh:mm'}}</td>
+              <td align="center">{{fl.arrivalTime | date : 'dd-MM-yyyy hh:mm'}}</td>
+              <td align="center">{{fl.connectedCities.length}}</td>
+              <td align="center">{{fl.flightTime}}</td>
+              <td align="center">{{fl.ticketPrice}}</td>
+              <td align="center"><input type="radio" name="gender" value="{{fl.id}}" checked></td>
+            </tr>
+          </table>
+          <button type="submit" class="btn btn-outline-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>
+
+<section class="ftco-section">
+  <div class="container-fluid">
+    <div class="row no-gutters">
+      <div class="col-md-6 col-lg-3 ftco-animate" *ngFor="let av of avio">
+        <a routerLink="/viewAvio" (click)="avioComp(av)" data-toggle="modal" data-target="#exampleModalLong3" class="block-5">
+          <img src="../assets/avioCompany/{{av.image}}">
+          <div class="text">
+            <h3 class="heading">{{av.name}}</h3>
+            <div class="post-meta">
+              <span>Address : {{av.address}}</span>
+              <span>Description : {{av.promoDescription}}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>

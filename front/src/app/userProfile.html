@@ -1,0 +1,712 @@
+<section class="home-slider owl-carousel">
+  <div class="slider-item" style="background-image: url('../assets/images/userProfile.jpg');"
+       data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row slider-text align-items-center">
+        <div class="col-md-7 col-sm-12 ftco-animate">
+          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Home</a></span>
+          <h1 class="mb-3">User Profile</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id=" user-profile-2" class="user-profile">
+  <div class="tabbable">
+    <ul class="nav nav-tabs padding-18">
+      <li class="active" id="P">
+        <a data-toggle="tab" href="#home">
+          <i class="green ace-icon fa fa-user bigger-120"></i>
+          Profile
+        </a>
+      </li>
+      <li *ngIf="userProfile.avioCompany" class="active" id="A">
+        <!-- <a data-toggle="tab" href="#home1">
+          <i class="green ace-icon fa fa-user bigger-120"></i>
+          Aviocompany profile
+        </a> -->
+      </li>
+      <li *ngIf="authority=='ADMIN_ADMIN'" class="active" id="C">
+        <a data-toggle="tab" href="#home4">
+          <i class="green ace-icon fa fa-user bigger-120"></i>
+          Avio
+        </a>
+      </li>
+      <li *ngIf="authority=='ADMIN_ADMIN'" class="active" id="U">
+        <a data-toggle="tab" href="#home5">
+          <i class="green ace-icon fa fa-user bigger-120"></i>
+          Users
+        </a>
+      </li>
+    </ul>
+
+    <div class="tab-content no-border padding-24">
+      <div id="home" class="tab-pane in active">
+        <div class="row">
+          <!-- <div class="col-xs-12 col-sm-3 center">
+							<span class="profile-picture">
+								<img class="editable img-responsive" alt=" Avatar" id="avatar2"
+                     src="http://bootdey.com/img/Content/avatar/avatar6.png">
+							</span>
+
+            <div class="space space-4"></div>
+
+
+            <button class="btn btn-sm btn-block btn-success" (click)="searchFriends()">Add a friend</button>
+            <button class="btn btn-sm btn-block btn-primary" (click)="friendList()">My friends</button>
+            <button class="btn btn-sm btn-block btn-success" (click)="getFriendRequests()">Friend requests</button>
+            <div hidden="{{isHidden}}">
+              <h4 class="blue">
+                <span class="middle">My friends</span>
+              </h4>
+
+
+              <table>
+                <tr *ngFor="let friend of friends">
+                  <td>
+                    <div class="profile-info-row">
+                      <div class="profile-info-name"> {{friend}}</div>
+                      <div class="profile-info-value">
+                        <button (click)="removeFriend(friend)">Remove</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div hidden="{{isHiddenSearch}}">
+              <h4 class="blue">
+                <span class="middle">Search friends</span>
+              </h4>
+              <form (submit)="searchByName($event)">
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Name:</div>
+                  <div class="profile-info-value">
+                    <input id="nameSearch" type="text"/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name">Surname:</div>
+                  <div class="profile-info-value">
+                    <input id="lastNameSearch" type="text"/>
+                  </div>
+                </div>
+
+                <div class="profile-info-value">
+                  <button type="submit">Search</button>
+                </div>
+
+
+                <table>
+                  <tr *ngFor="let possibleFriend of possibleFriends">
+                    <td>
+                      <div class="profile-info-row">
+                        <div class="profile-info-name"> {{possibleFriend.username}}</div>
+                        <div class="profile-info-name"> {{possibleFriend.name}}</div>
+                        <div class="profile-info-name"> {{possibleFriend.surname}}</div>
+
+                        <div class="profile-info-value">
+                          <button (click)="addFriend(possibleFriend.username)">Add</button>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+
+                </table>
+              </form>
+            </div>
+            <div hidden="{{isHiddenRequest}}">
+              <h4 class="blue">
+                <span class="middle">Friend requests</span>
+              </h4>
+              <table>
+                <tr *ngFor="let req of friendRequests">
+                  <td>
+                    <div class="profile-info-row">
+                      <div class="profile-info-name"> {{req.sender.username}}</div>
+                      <div class="profile-info-name"> {{req.sender.name}}</div>
+                      <div class="profile-info-name"> {{req.sender.surname}}</div>
+
+                      <div class="profile-info-value">
+                        <button (click)="acceptFriendRequest(req.sender.username)">Accept</button>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+
+              </table>
+            </div>
+          </div>/.col -->
+
+
+          <div class="space space-4"></div>
+          <div class="space space-4"></div>
+          <div class="space space-4"></div>
+          <!--OVDE-->
+
+          <div class="col-xs-12 col-sm-9">
+            <h4 class="blue">
+              <span class="middle">My profile</span>
+            </h4>
+            <form (submit)="changeInfo($event)">
+              <div class="profile-user-info">
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Username</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="usernameChange" value={{userProfile.username}} disabled/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Email</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="emailChange" value={{userProfile.email}}/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Location</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="cityChange" value={{userProfile.city}}/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Name</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="nameChange" value={{userProfile.name}}/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Last name</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="surnameChange" value={{userProfile.surname}}/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Phone number</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="numberChange" value={{userProfile.number}}/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Old password</div>
+
+                  <div class="profile-info-value">
+                    <input type="password" id="pass1"/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> New password</div>
+
+                  <div class="profile-info-value">
+                    <input type="password" id="pass2"/>
+                  </div>
+                </div>
+
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"></div>
+
+                  <div class="profile-info-value">
+                    <button type="submit">Submit changes</button>
+                  </div>
+                </div>
+
+              </div>
+            </form>
+
+
+          </div><!-- /.col -->
+        </div><!-- /.row -->
+
+        <div class="space-20"></div>
+
+
+
+      <div id="home1" class="tab-pane" *ngIf="userProfile.avioCompany">
+        <div class="col-xs-12 col-sm-9">
+          <h4 class="blue">
+            <span class="middle">Avio company</span>
+          </h4>
+          <form (submit)="changeAvioInfo($event)">
+            <div class="profile-user-info">
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Name</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="avioName" value={{userProfile.avioCompany.name}} disabled/>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Address</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="avioAddress" value={{userProfile.avioCompany.address}}/>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Promo description</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="avioPromoDescription" value={{userProfile.avioCompany.promoDescription}}/>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Income since start</div>
+
+                <div class="profile-info-value">
+                  {{this.avioIncome}}
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Locations</div>
+
+                <table>
+                  <tr>
+                    <td align="center"><b>Airport</b></td>
+                    <td align="center"><b>City</b></td>
+                    <td align="center"><b>Country</b></td>
+                  </tr>
+                  <tr *ngFor="let location of userProfile.avioCompany.locations">
+                    <td align="center">{{location.airport}}</td>
+                    <td align="center">{{location.city}}</td>
+                    <td align="center">{{location.country}}</td>
+                  </tr>
+                </table>
+
+              </div>
+
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"></div>
+
+                <div class="profile-info-value">
+                  <button type="submit">Submit changes</button>
+                </div>
+              </div>
+
+            </div>
+          </form>
+          <div><canvas id="chartContainer1" style="height: 370px; width: 50%;"></canvas></div>
+          <button class="btn btn-sm btn-block btn-success" (click)="showLocationDialog()">Add a location</button>
+
+          <div hidden="{{newLocationHidden}}">
+            <h4 class="blue">
+              <span class="middle">Add a Location</span>
+            </h4>
+
+            <table>
+              <tr>
+                <td align="center"><b>Airport</b></td>
+                <td align="center"><b>City</b></td>
+                <td align="center"><b>Country</b></td>
+                <td align="center"></td>
+              </tr>
+              <tr *ngFor="let location of possibleLocations">
+                <td align="center">{{location.airport}}</td>
+                <td align="center">{{location.city}}</td>
+                <td align="center">{{location.country}}</td>
+                <td align="center">
+                  <button (click)="addLocation(location)">Add</button>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+
+          <button class="btn btn-sm btn-block btn-primary" (click)="showLocationDeleteDialog()">Delete locations
+          </button>
+          <div hidden="{{deleteLocationHidden}}">
+            <h4 class="blue">
+              <span class="middle">Delete a Location</span>
+            </h4>
+
+
+            <table>
+              <tr>
+                <td align="center"><b>Airport</b></td>
+                <td align="center"><b>City</b></td>
+                <td align="center"><b>Country</b></td>
+                <td align="center"></td>
+              </tr>
+              <tr *ngFor="let location of userProfile.avioCompany.locations">
+                <td align="center">{{location.airport}}</td>
+                <td align="center">{{location.city}}</td>
+                <td align="center">{{location.country}}</td>
+                <td align="center">
+                  <button (click)="deleteLocation(location)">Delete</button>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <button class="btn btn-sm btn-block btn-success" (click)="showFlightDialog()">Add flights</button>
+          <div hidden="{{addFlightHidden}}">
+            <h4 class="blue">
+              <span class="middle">Add a flight</span>
+            </h4>
+
+            <form (submit)="addFlight($event)">
+              <div class="profile-user-info">
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Destination</div>
+
+                  <div class="profile-info-value">
+                    <select id="destinationFlight">
+                      <option *ngFor="let location of userProfile.avioCompany.locations" value="{{location.id}}">
+                        {{location.airport}}, {{location.city}}, {{location.country}}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Connecting airports</div>
+
+                  <div class="profile-info-value">
+                    <table>
+                      <tr *ngFor="let location of userProfile.avioCompany.locations">
+                        <td>{{location.airport}}, {{location.city}}, {{location.country}}</td>
+                        <td>
+                          <button type="button" (click)="addLocationToFlight(location)">Add</button>
+                        </td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Flight time</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="flightTimeFlight"/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Ticket price</div>
+
+                  <div class="profile-info-value">
+                    <input type="text" id="ticketPriceFlight"/>
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Departure time</div>
+
+                  <div class="profile-info-value">
+                    <input type="datetime-local" id="departure" placeholder="Departure">
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"> Arrival time</div>
+
+                  <div class="profile-info-value">
+                    <input type="datetime-local" id="arrival" placeholder="Departure">
+                  </div>
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-name"></div>
+
+                  <div class="profile-info-value">
+                    <button type="submit">Add</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+          </div>
+
+          <button class="btn btn-sm btn-block btn-primary" (click)="showAllFlightsDialog()">Show flights</button>
+          <div hidden="{{allFlightsHidden}}">
+            <h4 class="blue">
+              <span class="middle">All flights</span>
+            </h4>
+            <form (submit)="addTicket($event)">
+              <table>
+                <tr>
+                  <td align="center"><b>Destination</b></td>
+                  <td align="center"><b>Departure</b></td>
+                  <td align="center"><b>Arrival</b></td>
+                  <td align="center"><b>Ticket price</b></td>
+                  <td align="center"><b>Seat number</b></td>
+                  <td align="center"><b>Fast reservation discount</b></td>
+                  <td align="center"></td>
+                </tr>
+                <tr *ngFor="let flight of ourFlights">
+                  <td align="center">{{flight.destination.airport}}, {{flight.destination.city}},
+                    {{flight.destination.country}}
+                  </td>
+                  <td align="center">{{flight.departureTime | date : 'dd/MM/yyyy' }}</td>
+                  <td align="center">{{flight.arrivalTime | date : 'dd/MM/yyyy' }}</td>
+                  <td align="center">{{flight.ticketPrice}}</td>
+                  <td align="center"><input name="proba{{flight.id}}" type="text"/></td>
+                  <td align="center"><input name="proba1{{flight.id}}" type="text"/></td>
+
+                  <td align="center"><button (click)="pickFlight(flight)" type="submit">Add</button></td>
+
+                  <td align="center">
+                    <button (click)="pickFlight(flight)" type="submit">Add</button>
+                  </td>
+
+                </tr>
+              </table>
+            </form>
+          </div>
+
+          <button class="btn btn-sm btn-block btn-success" (click)="showAllTicketsDialog()">Show tickets</button>
+          <div hidden="{{allTicketsHidden}}">
+            <h4 class="blue">
+              <span class="middle">Unreserved tickets</span>
+            </h4>
+            <h5 class="red">
+              <span class="middle">Setting fast reservation discount of a ticket to a number bigger than zero makes it become a fast reservation ticket.</span>
+            </h5>
+
+            <form (submit)="changeTicket($event)">
+              <table>
+                <tr>
+                  <td align="center"><b>Destination</b></td>
+                  <td align="center"><b>Departure</b></td>
+                  <td align="center"><b>Arrival</b></td>
+                  <td align="center"><b>Ticket price</b></td>
+                  <td align="center"><b>Seat number</b></td>
+                  <td align="center"><b>Fast reservation discount (%)</b></td>
+                </tr>
+
+                <tr *ngFor="let ticket of unreservedTickets">
+                  <td hidden="true"><input type="text" value="{{ticket.id}}" id="id{{ticket.id}}"/></td>
+                  <td hidden="true"><input type="text" value="{{ticket.flight.id}}" id="flight{{ticket.id}}"/></td>
+                  <td align="center">{{ticket.flight.destination.airport}}, {{ticket.flight.destination.city}},
+                    {{ticket.flight.destination.country}}
+                  </td>
+                  <td align="center">{{ticket.flight.departureTime | date : 'dd/MM/yyyy' }}</td>
+                  <td align="center">{{ticket.flight.arrivalTime | date : 'dd/MM/yyyy' }}</td>
+                  <td align="center">{{ticket.flight.ticketPrice}}</td>
+                  <td align="center"><input type="text" name="proba{{ticket.id}}" value={{ticket.seatNumber}}/></td>
+                  <td align="center"><input type="text" name="proba1{{ticket.id}}"
+                                            value="{{ticket.fastReservationDiscount}}"/></td>
+
+                  <td align="center">
+                    <button (click)="pickTicket(ticket.id)" type="submit">Submit</button>
+                  </td>
+                  <td align="center">
+                    <button (click)="deleteTicket(ticket.id)">Delete</button>
+                  </td>
+
+                </tr>
+
+              </table>
+            </form>
+
+            <h4 class="blue">
+              <span class="middle">Unreserved tickets(fast reservation)</span>
+            </h4>
+            <h5 class="red">
+              <span class="middle">Setting fast reservation discount of a ticket to zero makes it become a regular ticket.</span>
+            </h5>
+
+            <table>
+              <tr>
+                <td align="center"><b>Destination</b></td>
+                <td align="center"><b>Departure</b></td>
+                <td align="center"><b>Arrival</b></td>
+                <td align="center"><b>Ticket price</b></td>
+                <td align="center"><b>Seat number</b></td>
+                <td align="center"><b>Fast reservation discount (%)</b></td>
+              </tr>
+              <tr *ngFor="let ticket of fastReserveTickets">
+                <td align="center">{{ticket.flight.destination.airport}}, {{ticket.flight.destination.city}},
+                  {{ticket.flight.destination.country}}
+                </td>
+                <td align="center">{{ticket.flight.departureTime | date : 'dd/MM/yyyy' }}</td>
+                <td align="center">{{ticket.flight.arrivalTime | date : 'dd/MM/yyyy' }}</td>
+                <td align="center">{{ticket.flight.ticketPrice}}</td>
+                <td align="center"><input type="text" value={{ticket.seatNumber}}/></td>
+                <td align="center"><input type="text" value={{ticket.fastReservationDiscount}}/></td>
+                <td align="center">
+                  <button>Submit</button>
+                </td>
+                <td align="center">
+                  <button>Delete</button>
+                </td>
+              </tr>
+            </table>
+
+          </div>
+          <button class="btn btn-sm btn-block btn-primary" (click)="showAllPricesDialog()">Show prices</button>
+          <div hidden="{{allPricesHidden}}">
+            <h4 class="blue">
+              <span class="middle">Pricings</span>
+            </h4>
+            <form (submit)="changePricing($event)">
+              <table border="1">
+                <tr>
+                  <td align="center"><b>Name</b></td>
+                  <td align="center"><b>Price</b></td>
+                  <td align="center"></td>
+                  <td align="center"></td>
+                </tr>
+                <tr *ngFor="let pricing of userProfile.avioCompany.prices">
+                  <td align="center"><input type="text" name="priceName{{pricing.id}}" value="{{pricing.name}}"/></td>
+                  <td align="center"><input type="number" name="pricePrice{{pricing.id}}" value="{{pricing.price}}"/>
+                  </td>
+                  priceName{{pricing.id}}
+                  <td align="center">
+                    <button (click)="pickPricing(pricing)" type="submit">Change</button>
+                  </td>
+                  <td align="center">
+                    <button (click)="deletePricing(pricing)">Delete</button>
+                  </td>
+                </tr>
+              </table>
+            </form>
+            <form (submit)="addPricing($event)">
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Pricing name</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="name"/>
+                </div>
+              </div>
+
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Pricing, well, price</div>
+
+                <div class="profile-info-value">
+                  <input type="number" id="price">
+                </div>
+
+                <div class="profile-info-row">
+                  <div class="profile-info-value">
+                    <button type="submit">Add</button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+
+      </div>
+      <div *ngIf="authority=='ADMIN_ADMIN'" id="home4" class="tab-pane">
+        <button class="btn btn-sm btn-block btn-primary" (click)="ShowAvioDialog()">Create Avio</button>
+        <div hidden="{{createAvio}}">
+          <div class="col-xs-12 col-sm-9">
+            <h4 class="blue">
+              <span class="middle">Create Avio Company</span>
+            </h4>
+            <form (submit)="createAvioo($event)">
+            <div class="profile-user-info">
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Name</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="avNa"/>
+                </div>
+              </div>
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Address</div>
+
+                <div class="profile-info-value">
+                  <input type="text" id="avAddr"/>
+                </div>
+              </div>
+              <div class="profile-info-row">
+                <div class="profile-info-name"> Promo description</div>
+
+                <div class="profile-info-value">
+                  <textarea row="5" type="text" id="avPromo"></textarea>
+                </div>
+              </div>
+              <div class="profile-info-value">
+                <button type="submit">Submit changes</button>
+              </div>
+            </div>
+            </form>
+          </div>
+        </div>
+      <div *ngIf="authority=='ADMIN_ADMIN'" id="home5" class="tab-pane">
+        <div class="col-xs-12 col-sm-9">
+          <h4 class="blue">
+            <span class="middle">Users</span>
+          </h4>
+          <form (submit)="changeAuthority($event)">
+            <table class="table">
+              <thead class="table-dark text-white">
+              <tr>
+                <th align="center">Name</th>
+                <th align="center">Surname</th>
+                <th align="center">Email</th>
+                <th align="center">Authority</th>
+                <th align="center">Change Authority</th>
+              </tr>
+              </thead>
+              <tr *ngFor="let us of users">
+                <td align="center">{{us.name}}</td>
+                <td align="center">{{us.surname}}</td>
+                <td align="center">{{us.email}}</td>
+                <td align="center"><p *ngFor="let a of us.authority">{{a.name}}</p></td>
+                <td align="center">
+                  <select id="changeAuth{{us.username}}">
+                      <option *ngFor="let auth of allAuthority" value="{{auth.name}}">{{auth.name}}</option>
+                  </select>
+                </td>
+                <td><button type="submit" (click)="chaAuth(us)" class="btn btn-outline-primary">Add</button></td>
+                <td><button type="submit" (click)="delAuth(us)" class="btn btn-outline-primary">Delete</button></td>
+              </tr>
+            </table>
+          </form>
+          <h4 class="blue">
+            <span class="middle">Change or add hotel/renta/avio</span>
+          </h4>
+          <form (submit)="addAndChange($event)">
+            <table class="table">
+              <thead class="table-dark text-white">
+              <tr>
+                <th align="center">Name</th>
+                <th align="center">Surname</th>
+                <th align="center">Email</th>
+                <th align="center">Authority</th>
+                <th align="center">Select AvioCompany</th>
+              </tr>
+              </thead>
+              <tr *ngFor="let us of users">
+                <td align="center">{{us.name}}</td>
+                <td align="center">{{us.surname}}</td>
+                <td align="center">{{us.email}}</td>
+                <td align="center"><p *ngFor="let a of us.authority">{{a.name}}</p></td>
+                <td align="center">
+                  <select id="Idavio{{us.username}}">
+                    <option value=""></option>
+                    <option *ngFor="let a of idAvio" value="{{a.name}}">{{a.name}}</option>
+                  </select>
+                </td>
+                <td><button type="submit" (click)="change(us)" class="btn btn-outline-primary">Change</button></td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

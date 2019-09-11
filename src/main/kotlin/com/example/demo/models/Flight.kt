@@ -17,17 +17,6 @@ data class Flight(
     @Version
     var version: Long? = null,
 
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @JoinColumn(name = "company")
-    var company: AvioCompany? = null,
-
-    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @JoinColumn(name = "destination")
-    var destination: Location? = null,
-
-    @OneToMany(mappedBy = "connectingFlight", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = false)
-    var connectingCities: Set<Location> = HashSet(),
-
     @Column(name = "departure_time")
     var departureTime: Date? = null,
 
@@ -38,12 +27,26 @@ data class Flight(
     var flightTime: Int = 0,
 
     @Column(name = "ticket_price")
-    var ticketPrice: Double = 0.toDouble(),
+    var ticketPrice: Double = 0.toDouble()
+
+
+
+) {
+    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    @JoinColumn(name = "company")
+    var company: AvioCompany? = null
+
+    @ManyToOne(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(name = "destination")
+    var destination: Location? = null
+
+    @OneToMany(mappedBy = "connectingFlight", fetch = FetchType.LAZY, cascade = [CascadeType.ALL], orphanRemoval = false)
+    var connectingCities: Set<Location> = HashSet()
 
     @OneToMany(mappedBy = "flight", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
     var tickets: Set<Ticket> = HashSet()
 
-)
+}
 
 fun Flight.toDTO() =
     FlightDTO(
@@ -54,6 +57,6 @@ fun Flight.toDTO() =
         flightTime = flightTime,
         ticketPrice = ticketPrice,
         companyDTO = company?.toDTO(),
-        locationDTO = destination?.toDTO(),
+        destination = destination?.toDTO(),
         connectedCities = mutableSetOf<LocationDTO>().apply { connectingCities.forEach { add(it.toDTO()) } }
     )

@@ -1,0 +1,230 @@
+<section class="home-slider owl-carousel">
+  <div class="slider-item" style="background-image: url('../assets/planeCover.gif');" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+      <div class="row slider-text align-items-center">
+        <div class="col-md-7 col-sm-12 ftco-animate">
+          <p class="breadcrumbs"><span class="mr-2"><a routerLink="/">Home</a></span><span>Flight</span></p>
+          <h1 class="mb-3">Flight</h1>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="container">
+  <div class="stepwizard col-md-offset-3">
+    <div class="stepwizard-row setup-panel">
+      <div class="stepwizard-step">
+        <a type="button" class="btn btn-primary btn-circle" id="1">1</a>
+        <p>Flights</p>
+      </div>
+      <div class="stepwizard-step">
+        <a type="button" class="btn btn-default btn-circle dis" id="2" >2</a>
+        <p>Seats</p>
+      </div>
+      <div class="stepwizard-step">
+        <a type="button" class="btn btn-default btn-circle dis" id="3">3</a>
+        <p>Friends</p>
+      </div>
+      <div class="stepwizard-step">
+        <a type="button" class="btn btn-default btn-circle dis" id="4">4</a>
+        <p>User detail</p>
+      </div>
+    </div>
+  </div>
+  <form (submit)="chooseAvio($event)">
+    <div class="row setup-content" hidden="{{fly}}">
+      <div class="col-xs-6 col-md-offset-3">
+        <div class="col-md-12">
+          <h3> Reserve Flights</h3>
+          <div class="form-group">
+            <table class="table" style="border: 1px solid">
+              <thead class="table-dark text-white">
+              <tr>
+                <td align="center"></td>
+                <td align="center"><b>Name</b></td>
+                <td align="center"><b>Destination</b></td>
+                <td align="center"><b>Ticket price</b></td>
+                <td align="center"><b>Chosen</b></td>
+              </tr>
+              </thead>
+              <tr *ngFor="let fl of flight">
+                <td align="center"><img src="../assets/avioCompany/{{fl.companyDTO.image}}" width="50" height="50"/>
+                </td>
+                <td align="center">{{fl.companyDTO.name}}</td>
+                <td align="center">{{fl.locationDTO.city}},{{fl.locationDTO.country}}</td>
+                <td align="center">{{fl.ticketPrice}}</td>
+                <td align="center"><input type="radio" name="gender" value="{{fl.id}}" checked></td>
+              </tr>
+            </table>
+          </div>
+          <button class="btn btn-success nextBtn btn-lg pull-right" id="next1" (click)="seats()" type="submit">Next</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form>
+    <div class="plane" hidden="{{set}}">
+      <div class="cockpit">
+        <h1>Please select seat</h1>
+      </div>
+      <div class="exit exit--front fuselage">
+      </div>
+      <ol class="cabin fuselage">
+        <li class="row row--1">
+          <ol class="seats">
+            <li class="seat" *ngFor="let t of ticket">
+              <input type="checkbox" (change)="choseSeats(t.seatNumber)" id="{{t.id}}{{numeracija[t.id]}}"/>
+              <label for="{{t.id}}{{numeracija[t.id]}}">{{t.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--2">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t1 of ticket1">
+              <input type="checkbox" name="seats" (change)="choseSeats(t1.seatNumber)" id="{{t1.id}}{{numeracija[t1.id]}}" />
+              <label for="{{t1.id}}{{numeracija[t1.id]}}">{{t1.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--3">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t2 of ticket2">
+              <input type="checkbox" (change)="choseSeats(t2.seatNumber)" id="{{t2.id}}{{numeracija[t2.id]}}"/>
+              <label for="{{t2.id}}{{numeracija[t2.id]}}">{{t2.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--4">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t3 of ticket3">
+              <input type="checkbox" (change)="choseSeats(t3.seatNumber)" id="{{t3.id}}{{numeracija[t3.id]}}"/>
+              <label for="{{t3.id}}{{numeracija[t3.id]}}">{{t3.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--5">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t4 of ticket4">
+              <input type="checkbox" (change)="choseSeats(t4.seatNumber)" id="{{t4.id}}{{numeracija[t4.id]}}"/>
+              <label for="{{t4.id}}{{numeracija[t4.id]}}">{{t4.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--6">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t5 of ticket5">
+              <input type="checkbox" (change)="choseSeats(t5.seatNumber)" id="{{t5.id}}{{numeracija[t5.id]}}"/>
+              <label for="{{t5.id}}{{numeracija[t5.id]}}">{{t5.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--7">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t6 of ticket6">
+              <input type="checkbox" (change)="choseSeats(t6.seatNumber)" id="{{t6.id}}{{numeracija[t6.id]}}"/>
+              <label for="{{t6.id}}{{numeracija[t6.id]}}">{{t6.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+        <li class="row row--8">
+          <ol class="seats" type="A">
+            <li class="seat" *ngFor="let t7 of ticket7">
+              <input type="checkbox" (change)="choseSeats(t7.seatNumber)" id="{{t7.id}}{{numeracija[t7.id]}}"/>
+              <label for="{{t7.id}}{{numeracija[t7.id]}}">{{t7.seatNumber}}</label>
+            </li>
+          </ol>
+        </li>
+      </ol>
+      <div class="exit exit--back fuselage">
+      </div>
+      <button class="btn btn-primary prevBtn btn-lg pull-right" id="prev1"  (click)="flights()" type="button">Prev</button>
+      <button class="btn btn-primary nextBtn btn-lg pull-right" id="next2" (click)="friends()" type="button">Next</button>
+    </div>
+  </form>
+  <form>
+    <div class="row setup-content" hidden="{{fri}}">
+      <div class="col-xs-6 col-md-offset-3">
+        <div class="col-md-12">
+          <h3>Friends</h3>
+          <div class="form-group">
+            <table class="table" style="border: 1px solid">
+              <thead class="table-dark text-white">
+              <tr>
+                <td align="center"><b>Name</b></td>
+                <td align="center"><b>Surname</b></td>
+                <td align="center"><b></b></td>
+                <td align="center"><b>Chosen</b></td>
+              </tr>
+              </thead>
+              <tr *ngFor="let k of PunoFreKor">
+                <td align="center">{{k.name}}</td>
+                <td align="center">{{k.surname}}</td>
+                <td align="center"></td>
+                <td align="center"><input type="checkbox" name="friend" (change)="chooseFriends(k)"></td>
+                <td></td>
+              </tr>
+            </table>
+          </div>
+          <button class="btn btn-primary prevBtn btn-lg pull-right" id="prev2" (click)="seats()" type="button">Prev</button>
+          <button class="btn btn-primary nextBtn btn-lg pull-right" id="next3" (click)="userData()" type="button">Next</button>
+        </div>
+      </div>
+    </div>
+  </form>
+  <form (submit)="userDet($event)">
+    <div class="row setup-content" hidden="{{user}}">
+      <div class="col-xs-6 col-md-offset-3">
+        <div class="col-md-12">
+          <h3> User data</h3>
+          <div class="form-row">
+            <div class="form-group col-md-6">
+              <label>Name</label>
+              <input type="text" class="form-control" id="nam" disabled value="{{loginUser.name}}">
+            </div>
+            <div class="form-group col-md-6">
+              <label>Surname</label>
+              <input type="text" class="form-control" id="sur" disabled value="{{loginUser.surname}}" >
+            </div>
+            <div class="form-group col-md-6">
+              <label>Passport number</label>
+              <input type="text" class="form-control" id="pass" required>
+            </div>
+          </div>
+          <div class="form-row" *ngFor="let i of Ispis_polja">
+            <div class="form-group col-md-6">
+              <label>Name</label>
+              <input type="text" class="form-control" id="nam{{i.id}}" disabled value="{{i.name}}">
+            </div>
+            <div class="form-group col-md-6">
+              <label>Surname</label>
+              <input type="text" class="form-control" id="sur{{i.id}}" disabled value="{{i.surname}}" >
+            </div>
+            <div class="form-group col-md-6">
+              <label>Passport number</label>
+              <input type="text" class="form-control" id="pass{{i.id}}" required>
+            </div>
+          </div>
+          <div class="form-row" *ngFor="let pod of podaciKorisnika">
+            <div class="form-group col-md-6">
+              <label>Name</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label>Surname</label>
+              <input type="text" class="form-control">
+            </div>
+            <div class="form-group col-md-6">
+              <label>Passport number</label>
+              <input type="text" class="form-control">
+            </div>
+          </div>
+          <button class="btn btn-primary prevBtn btn-lg pull-right" id="prev3" (click)="friendsPrev()" type="button">Prev</button>
+          <button class="btn btn-success nextBtn btn-lg pull-right" id="next4" (click)="hotel()" type="submit">Submit</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+
+

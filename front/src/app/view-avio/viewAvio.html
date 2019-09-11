@@ -1,0 +1,81 @@
+<!-- Button trigger modal -->
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h5 class="modal-title" id="exampleModalLongTitle">AvioCompany</h5>
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body" style="overflow-y:scroll;max-height:500px;">
+      <form>
+        <div class="form-row">
+          <img *ngIf="viewAvio.image!==undefined" src="../assets/avioCompany/{{viewAvio.image}}" width="200"
+               height="200"/>
+        </div>
+        <div class="col">
+          <div class="col-form-label col-md-6">
+            <label>Name</label>
+            <input type="text" class="form-control" value="{{viewAvio.name}}" disabled>
+          </div>
+          <div class="form-group col-md-6">
+            <label>Address</label>
+            <input type="text" class="form-control" value="{{viewAvio.address}}" disabled>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea row="5" class="form-control" value="{{viewAvio.promoDescription}}" disabled></textarea>
+          </div>
+          <div >
+            <div class="form-group" *ngFor="let f of flight">
+              <table class="table" *ngIf="f.companyDTO.id===viewAvio.id" style="border: 1px solid">
+                <thead class="table-dark text-white">
+                <tr>
+                  <td align="center"><b>Destination</b></td>
+                  <td align="center"><b>Ticket price</b></td>
+                  <td *ngIf="this.user" align="center"><b>Reserve</b></td>
+                </tr>
+                </thead>
+                <tr>
+                  <td align="center">{{f.locationDTO.country}},{{f.locationDTO.city}}</td>
+                  <td align="center">{{f.ticketPrice}}</td>
+                  <td *ngIf="this.user" align="center">
+                    <button type="submit" class="btn btn-outline-success">Reserve</button>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div *ngIf="this.user">
+        <h4>
+          Fast reservation tickets
+        </h4>
+        <table>
+          <tr>
+            <td align="center"><b>Destination</b></td>
+            <td align="center"><b>Departure</b></td>
+            <td align="center"><b>Arrival</b></td>
+            <td align="center"><b>Ticket price</b></td>
+            <td align="center"><b>Seat number</b></td>
+            <td align="center"><b>Fast reservation discount (%)</b></td>
+          </tr>
+          <tr *ngFor="let ticket of displayTickets">
+            <td align="center">{{ticket.flight.locationDTO.airport}}, {{ticket.flight.locationDTO.city}},
+              {{ticket.flight.locationDTO.country}}
+            </td>
+            <td align="center">{{ticket.flight.departureTime | date : 'dd/MM/yyyy' }}</td>
+            <td align="center">{{ticket.flight.arrivalTime | date : 'dd/MM/yyyy' }}</td>
+            <td align="center">{{ticket.flight.ticketPrice}}</td>
+            <td align="center">{{ticket.seatNumber}}</td>
+            <td align="center">{{ticket.fastReservationDiscount}}</td>
+            <td align="center">
+              <button (click)="reserveTicket(ticket)">Reserve</button>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

@@ -23,7 +23,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["aviocompanies"])
+@RequestMapping(value = ["api/aviocompanies"])
 class AvioCompanyController {
 
     @Autowired
@@ -79,7 +79,7 @@ class AvioCompanyController {
         return ResponseEntity(responseTickets, HttpStatus.OK)
     }
 
-    @RequestMapping(value = ["/allTickets"], method = [RequestMethod.GET])
+    @RequestMapping(value = ["/allOurTickets"], method = [RequestMethod.GET])
     fun getAllTickets(request: HttpServletRequest): ResponseEntity<List<TicketDTO>> {
 
         val username = with(tokenUtils) {
@@ -96,7 +96,11 @@ class AvioCompanyController {
 
 
         ticketService.findAll().forEach { ticket ->
+
+            println(ticket.flight)
+            print(avioCompany.flights.size)
             avioCompany.flights.forEach { flight ->
+                print(flight)
                 if (ticket.flight?.id?.equals(flight.id)!!)
                     responseTickets.add(ticket.toDTO())
             }
@@ -105,8 +109,6 @@ class AvioCompanyController {
         return ResponseEntity(responseTickets, HttpStatus.OK)
     }
 
-
-    // TODO Check this out
 
     @RequestMapping(value = ["/allNotMine"], method = [RequestMethod.GET])
     fun getAllAvioCompaniesNotMine(request: HttpServletRequest): ResponseEntity<List<LocationDTO>> {
@@ -126,7 +128,7 @@ class AvioCompanyController {
         var validAuthority = false
 
         admin.authorities!!.forEach {
-            if (it.name.equals("AVIO")) {
+            if (it.name.equals("AVIO_ADMIN")) {
                 validAuthority = true
                 return@forEach
             }
@@ -143,7 +145,7 @@ class AvioCompanyController {
     }
 
     @Transactional
-    @RequestMapping(value = ["/removeLocation"], method = [RequestMethod.PUT])
+    @RequestMapping(value = ["/remove"], method = [RequestMethod.PUT])
     fun removeLocation(request: HttpServletRequest, @RequestBody locationDTO: LocationDTO): ResponseEntity<Void> {
 
         val username = with(tokenUtils) {
@@ -162,7 +164,7 @@ class AvioCompanyController {
         var validAuthority = false
 
         admin.authorities!!.forEach {
-            if (it.name.equals("AVIO")) {
+            if (it.name.equals("AVIO_ADMIN")) {
                 println(it.name)
                 validAuthority = true
                 return@forEach
@@ -173,7 +175,7 @@ class AvioCompanyController {
         if (!validAuthority) return Response.notFound()
 
         val pastLocations = avioCompany.locations.toMutableList().apply { remove(location) }
-        avioCompany.locations = pastLocations.toSet()
+        avioCompany.locations = pastLocations.toMutableSet()
 
         avioCompanyService.save(avioCompany)
 
@@ -200,7 +202,7 @@ class AvioCompanyController {
         var validAuthority = false
 
         admin.authorities?.forEach {
-            if (it.name.equals("AVIO")) {
+            if (it.name.equals("AVIO_ADMIN")) {
                 println(it.name)
                 validAuthority = true
                 return@forEach
@@ -230,7 +232,7 @@ class AvioCompanyController {
         var validAuthority = false
 
         admin.authorities?.forEach {
-            if (it.name.equals("AVIO")) {
+            if (it.name.equals("AVIO_ADMIN")) {
                 println(it.name)
                 validAuthority = true
                 return@forEach

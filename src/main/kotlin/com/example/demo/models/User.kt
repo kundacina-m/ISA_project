@@ -64,23 +64,28 @@ data class User (
     var lastPasswordResetDate: Timestamp? = null,
 
     @Column(name = "pass_change_req", nullable = false)
-    var isPassChanged: Boolean = false,
+    var isPassChanged: Boolean = false
+
+
+
+) : UserDetails {
 
     @ManyToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinTable(name = "user_authority", joinColumns = [JoinColumn(name = "user_id", referencedColumnName = "id")], inverseJoinColumns = [JoinColumn(name = "authority_id", referencedColumnName = "id")])
-    private var authorities: List<Authority>? = listOf(),
+    private var authorities: List<Authority>? = listOf()
 
     @OneToMany(mappedBy = "firstFriend", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
-    var friendships: Set<Friendship> = HashSet(),
+    var friendships: Set<Friendship>? = null
 
     @OneToMany(mappedBy = "secondFriend", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
-    var friendshipsCopy: Set<Friendship> = HashSet(),
+    var friendshipsCopy: Set<Friendship>? = null
 
     @ManyToOne(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
     @JoinColumn(name = "avio_company")
     var avioCompany: AvioCompany? = null
 
-) : UserDetails {
+
+
     // Getters override from UserDetails
     @JsonIgnore
     override fun isAccountNonExpired(): Boolean = true

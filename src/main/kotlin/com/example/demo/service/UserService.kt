@@ -68,7 +68,6 @@ open class UserService : UserDetailsService {
 
         verificationTokenService.save(token)
 
-        // TODO pogledati sta je ovo
 
 //        try {
 //            emailService!!.sendMail(user, token.token!!)

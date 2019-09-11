@@ -10,7 +10,7 @@ insert into jdbc.user (username, email, pass, first_name, last_name, city, phone
 values ('user1', 'user1@gmail.com', '$2a$10$uT0lZ2AQG2qNEVZn5zQfP.tng7Di09OEH4OwHK4bx4gdpYSqLQds2', 'Korisnik1', 'Korisnikovic', 'Bileca', '0691-1111111', true , true);
 
 insert into jdbc.user (username, email, pass, first_name, last_name, city, phone_number, enabled, pass_change_req, avio_company)
-values ('user2', 'user2@gmail.com', '$2a$10$uT0lZ2AQG2qNEVZn5zQfP.tng7Di09OEH4OwHK4bx4gdpYSqLQds2', 'Korisnik2', 'Useric', 'Novi Sad', '062-22222222', true, true, 3);
+values ('user2', 'user2@gmail.com', '$2a$10$uT0lZ2AQG2qNEVZn5zQfP.tng7Di09OEH4OwHK4bx4gdpYSqLQds2', 'Korisnik2', 'Useric', 'Novi Sad', '062-22222222', true, true, 1);
 
 insert into jdbc.user (username, email, pass, first_name, last_name, city, phone_number, enabled,pass_change_req)
 values ('user3', 'user3@gmail.com', '$2a$10$uT0lZ2AQG2qNEVZn5zQfP.tng7Di09OEH4OwHK4bx4gdpYSqLQds2', 'Korisnik3', 'Admin', 'Beograd', '063-3333333', true,true);
@@ -20,7 +20,7 @@ insert into jdbc.avio_prices (name, price, avio_company) values ('Food', 25, 1);
 insert into jdbc.avio_prices (name, price, avio_company) values ('Wifi', 3, 1);
 
 insert into jdbc.authority (name) values ('USER');
-insert into jdbc.authority (name) values ('AVIO');
+insert into jdbc.authority (name) values ('AVIO_ADMIN');
 insert into jdbc.authority (name) values ('ADMIN');
 
 
@@ -30,7 +30,7 @@ insert into jdbc.user_authority(user_id, authority_id) values (2, 1);
 insert into jdbc.user_authority(user_id, authority_id) values (3, 1);
 insert into jdbc.user_authority(user_id, authority_id) values (3, 2);
 
-insert into jdbc.user_authority(user_id, authority_id) values (2, 3);
+insert into jdbc.user_authority(user_id, authority_id) values (2, 2);
 
 insert into jdbc.friendship(sender, receiver, valid) values (1, 2, true);
 
@@ -38,7 +38,9 @@ insert into jdbc.friendship(sender, receiver, valid) values (1, 2, true);
 insert into jdbc.location(airport, city, country) values ('Nikola Tesla', 'Belgrade', 'Serbia');
 insert into jdbc.location(airport, city, country) values ('JFK', 'New York', 'USA');
 
-insert into jdbc.location_avio_company(avio_company_id, location_id) values (3, 1);
+insert into jdbc.location_avio_company(avio_company_id, location_id) values (2, 1);
+insert into jdbc.location_avio_company(avio_company_id, location_id) values (1, 2);
+insert into jdbc.location_avio_company(avio_company_id, location_id) values (4, 1);
 insert into jdbc.location_avio_company(avio_company_id, location_id) values (3, 2);
 
 insert into jdbc.flight(arrival_time, departure_time, flight_time, ticket_price, company, destination, version)
@@ -48,29 +50,32 @@ insert into jdbc.flight(arrival_time, departure_time, flight_time, ticket_price,
 values ('2019-09-23 15:00','2019-09-13 18:00',1.5,100,1,1,0);
 
 insert into jdbc.location (airport, city, country, connecting_flight)
-VALUES ('Nikola Tesla','Kraljevo','Serbia',1);
+VALUES ('Nikola Tesla','Bileca','Serbia',1);
 
 insert into jdbc.location (airport, city, country, connecting_flight)
-VALUES ('Batajnica','Kragujevac','Serbia',2);
+VALUES ('Aloha','Novi Sad','Serbia',2);
 
+SET FOREIGN_KEY_CHECKS=0;
 
---insert into jdbc.ticket(version, fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0, 10,'','','',true,1,1);
+insert into jdbc.ticket(version, fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0, 10,'','','',false,1,1);
 
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0, 0,'','','',true,2,1);
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,0,'','','',false,3,1);
---
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,0,'','','',true,4,1);
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,0,'','','',false,5,1);
---
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,50,'','','',false,6,1);
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,0,'','','',false,7,1);
---
---insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
---VALUES(0,0,'','','',false,8,2);
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0, 0,'','','',false,2,1);
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,0,'','','',false,3,1);
+
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,0,'','','',false,4,1);
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,0,'','','',false,5,1);
+
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,50,'','','',false,6,1);
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,0,'','','',false,7,1);
+
+insert into jdbc.ticket(version,fast_reservation_discount, passenger_surname, passenger_name, passport_number, reserved, seat_number, flight)
+VALUES(0,0,'','','',false,8,2);
+
+SET  FOREIGN_KEY_CHECKS=1;

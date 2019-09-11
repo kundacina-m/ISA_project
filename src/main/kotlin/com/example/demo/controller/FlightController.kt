@@ -20,7 +20,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["flights"])
+@RequestMapping(value = ["api/flights"])
 class FlightController {
 
     @Autowired
@@ -93,14 +93,15 @@ class FlightController {
         val flight = Flight(
             arrivalTime = flightDTO.arrivalTime,
             departureTime = flightDTO.departureTime,
-            company = avioCompany,
             flightTime = flightDTO.flightTime,
-            ticketPrice = flightDTO.ticketPrice,
-            destination = locationService.findById(flightDTO.locationDTO?.id)
-        )
+            ticketPrice = flightDTO.ticketPrice
+        ).apply {
+            company = avioCompany
+            destination = locationService.findById(flightDTO.destination?.id)
+        }
 
 
-        // TODO check if this is right
+
         val connectingCities = flight.connectingCities.toMutableList()
 
         flightDTO.connectedCities.forEach {

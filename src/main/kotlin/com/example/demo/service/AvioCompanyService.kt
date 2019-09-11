@@ -14,6 +14,6 @@ open class AvioCompanyService {
 
     fun findAll(): List<AvioCompany> = repository.findAll()
     fun findByName(name: String): AvioCompany? = repository.findByName(name)
-    fun save(avioCompany: AvioCompany): AvioCompany = repository.save(avioCompany)
+    fun save(avioCompany: AvioCompany): AvioCompany? = repository.save(avioCompany)
 
 }

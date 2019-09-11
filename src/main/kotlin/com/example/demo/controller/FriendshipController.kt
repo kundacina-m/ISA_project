@@ -3,6 +3,7 @@ package com.example.demo.controller
 
 import com.example.demo.dto.FriendshipDTO
 import com.example.demo.controller.helper.Response
+import com.example.demo.dto.EmptyResponse
 import com.example.demo.models.Friendship
 import com.example.demo.models.toDTO
 import org.springframework.beans.factory.annotation.Autowired
@@ -19,7 +20,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["friendships"])
+@RequestMapping(value = ["api/friendships"])
 class FriendshipController {
 
     @Autowired
@@ -67,20 +68,23 @@ class FriendshipController {
     }
 
     @RequestMapping(value = ["/add"], method = [RequestMethod.POST])
-    fun addFriend(request: HttpServletRequest, @RequestBody friendUsername: String): ResponseEntity<Void> {
+    fun addFriend(request: HttpServletRequest, @RequestBody friendUsername: String): ResponseEntity<EmptyResponse> {
+
+
+        val friendUser = friendUsername.drop(1).dropLast(1)
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
         } ?: return Response.unauthorized()
 
 
-        val friendship = Friendship(
-            firstFriend = userService.getUser(username),
-            secondFriend = userService.getUser(friendUsername)
-        )
+        val friendship = Friendship().apply {
+            firstFriend = userService.getUser(username)!!
+            secondFriend = userService.getUser(friendUser)!!
+        }
 
-        return if (friendshipService.save(friendship) != null) Response.created()
-        else Response.notFound()
+        friendshipService.save(friendship)?.let { return Response.ok() } ?: return Response.notFound()
+
     }
 
     @RequestMapping(value = ["/accept"], method = [RequestMethod.PUT])
@@ -104,7 +108,9 @@ class FriendshipController {
 
     @Transactional
     @RequestMapping(value = ["/remove"], method = [RequestMethod.PUT])
-    fun removeFriend(request: HttpServletRequest, @RequestBody friendUsername: String): ResponseEntity<Void> {
+    fun removeFriend(request: HttpServletRequest, @RequestBody friendUsername: String): ResponseEntity<EmptyResponse> {
+
+        val friendUser = friendUsername.drop(1).dropLast(1)
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -113,14 +119,16 @@ class FriendshipController {
         val me = userService.getUser(username)
             ?: return Response.unauthorized()
 
-        val friend = userService.getUser(friendUsername)
+        val friend = userService.getUser(friendUser)
             ?: return Response.notFound()
 
-        when {
-            friendshipService.findFriendship(friend, me) != null -> friendshipService.deleteFriendship(friend, me)
-            friendshipService.findFriendship(me, friend) != null -> friendshipService.deleteFriendship(me, friend)
-            else -> return Response.notFound()
-        }
+        friendshipService.findFriendship(me, friend)?.let { friendshipService.deleteFriendship(me, friend)?.let { return Response.ok() } }
+        friendshipService.findFriendship(friend, me)?.let { friendshipService.deleteFriendship(friend, me)?.let { return Response.ok() } }
+//        when {
+//            friendshipService.findFriendship(friend, me) != null -> friendshipService.deleteFriendship(friend, me)
+//            friendshipService.findFriendship(me, friend) != null -> friendshipService.deleteFriendship(me, friend)
+//            else -> return Response.notFound()
+//        }
 
         return Response.ok()
     }

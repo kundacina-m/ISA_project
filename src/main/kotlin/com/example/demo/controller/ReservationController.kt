@@ -3,6 +3,7 @@ package com.example.demo.controller
 import com.example.demo.dto.ReservationDTO
 import com.example.demo.dto.TicketDTO
 import com.example.demo.controller.helper.Response
+import com.example.demo.dto.EmptyResponse
 import com.example.demo.models.Reservation
 import com.example.demo.models.ReservationToken
 import com.example.demo.models.Ticket
@@ -20,7 +21,7 @@ import java.util.*
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["reservations"])
+@RequestMapping(value = ["api/reservations"])
 class ReservationController {
 
     @Autowired
@@ -54,7 +55,7 @@ class ReservationController {
         }
 
     @RequestMapping(value = ["/reserve"], method = [RequestMethod.POST])
-    fun reserveFlight(request: HttpServletRequest, @RequestBody ticketsRequest: Set<TicketDTO>): ResponseEntity<Void> {
+    fun reserveFlight(request: HttpServletRequest, @RequestBody ticketsRequest: Set<TicketDTO>): ResponseEntity<EmptyResponse> {
 
         val username = with(tokenUtils) {
             getUsernameFromToken(getToken(request) ?: return Response.unauthorized())
@@ -66,6 +67,8 @@ class ReservationController {
         ticketsRequest.forEach { ticketRequested ->
             val ticket = ticketService.findById(ticketRequested.id)
                 ?: return Response.notFound()
+
+            println(ticketRequested.passengerLastName)
 
             ticket.passengerLastName = ticketRequested.passengerLastName
             ticket.passengerName = ticketRequested.passengerName
@@ -91,11 +94,11 @@ class ReservationController {
 
         reservationService.save(reservation)
 
-        try {
-            emailService.sendMailFlightReservation(me, reservation)
-        } catch (e: Exception) {
-            println("Greska prilikom slanja emaila: " + e.message)
-        }
+//        try {
+//            emailService.sendMailFlightReservation(me, reservation)
+//        } catch (e: Exception) {
+//            println("Greska prilikom slanja emaila: " + e.message)
+//        }
 
         reservation.tickets.forEach { ticket ->
             if (ticket.passengerUsername != null)

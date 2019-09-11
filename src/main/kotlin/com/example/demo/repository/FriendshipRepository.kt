@@ -10,6 +10,6 @@ interface FriendshipRepository : JpaRepository<Friendship, Long> {
 
     fun findAllByFirstFriendOrSecondFriend(sender: User, receiver: User): List<Friendship>
     fun findAllBySecondFriendAndValid(receiver: User, valid: Boolean): List<Friendship>
-    fun findByFirstFriendAndSecondFriend(sender: User, receiver: User): Friendship
+    fun findByFirstFriendAndSecondFriend(sender: User, receiver: User): Friendship?
     fun deleteByFirstFriendAndSecondFriend(sender: User, receiver: User): Int?
 }

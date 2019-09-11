@@ -16,12 +16,7 @@ data class Location(
     @Version
     var version: Long? = null,
 
-    @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
-    @JoinColumn(name = "connecting_flight")
-    var connectingFlight: Flight? = null,
 
-    @OneToMany(mappedBy = "destination", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
-    var flightsDestination: Set<Flight> = HashSet(),
 
     @Column(name = "airport", nullable = false, length = 25)
     var airport: String? = null,
@@ -32,7 +27,14 @@ data class Location(
     @Column(name = "country", nullable = false, length = 25)
     var country: String? = null
 
-)
+) {
+    @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
+    @JoinColumn(name = "connecting_flight")
+    var connectingFlight: Flight? = null
+
+    @OneToMany(mappedBy = "destination", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
+    var flightsDestination: Set<Flight> = HashSet()
+}
 
 fun Location.toDTO() =
     LocationDTO(

@@ -18,7 +18,7 @@ open class TicketService {
     fun findById(id: Int?): Ticket? = repository.findById(id)
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
-    fun save(ticket: Ticket): Ticket = repository.save(ticket)
+    fun save(ticket: Ticket): Ticket? = repository.save(ticket)
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, isolation = Isolation.SERIALIZABLE)
     fun removeById(id: Int?) = let { repository.removeById(id) }

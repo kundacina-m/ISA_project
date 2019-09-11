@@ -28,7 +28,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["users"])
+@RequestMapping(value = ["api/users"])
 class UserController {
 
     @Autowired
@@ -89,7 +89,6 @@ class UserController {
 
         service.save(temp)
 
-        // TODO OVDJE ERROR
 //        service.completeRegistration(user.username!!)
         return Response.created()
     }

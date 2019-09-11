@@ -15,7 +15,7 @@ import java.util.ArrayList
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["locations"])
+@RequestMapping(value = ["api/locations"])
 class LocationController {
 
     @Autowired

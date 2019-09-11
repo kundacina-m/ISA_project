@@ -23,23 +23,24 @@ data class AvioCompany(
     @Column(name = "promo_description", columnDefinition = "varchar(500) default 'UNKNOWN'")
     var promoDescription: String? = null,
 
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
-    var flights: Set<Flight> = HashSet(),
-
-    @OneToMany(mappedBy = "avioCompany", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
-    var admins: Set<User> = HashSet(),
-
-    @OneToMany(mappedBy = "avioCompany", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
-    var prices: Set<AvioPrices> = HashSet(),
-
-    @ManyToMany
-    @JoinTable(name = "location_avio_company", joinColumns = [JoinColumn(name = "avio_company_id", referencedColumnName = "id")], inverseJoinColumns = [JoinColumn(name = "location_id", referencedColumnName = "id")])
-    var locations: Set<Location> = HashSet(),
-
     @Column(name = "image", length = 50)
     var image: String? = null
 
-)
+) {
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = [CascadeType.ALL])
+    var flights: Set<Flight> = HashSet()
+
+    @OneToMany(mappedBy = "avioCompany", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
+    var admins: Set<User> = HashSet()
+
+    @OneToMany(mappedBy = "avioCompany", fetch = FetchType.LAZY, cascade = [CascadeType.PERSIST], orphanRemoval = true)
+    var prices: Set<AvioPrices> = HashSet()
+
+    @ManyToMany
+    @JoinTable(name = "location_avio_company", joinColumns = [JoinColumn(name = "avio_company_id", referencedColumnName = "id")], inverseJoinColumns = [JoinColumn(name = "location_id", referencedColumnName = "id")])
+    var locations: Set<Location> = HashSet()
+}
+
 
 fun AvioCompany.toDTO() =
     AvioCompanyDTO(

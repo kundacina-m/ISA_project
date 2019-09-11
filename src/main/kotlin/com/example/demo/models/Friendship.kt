@@ -17,17 +17,18 @@ data class Friendship(
     var valid: Boolean = false,
 
     @Version
-    var version: Long? = null,
+    var version: Long? = null
+
+){
 
     @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
     @JoinColumn(name = "sender", nullable = false)
-    var firstFriend: User? = null,
+    var firstFriend: User? = null
 
     @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver", nullable = false)
     var secondFriend: User? = null
-
-)
+}
 
 fun Friendship.toDTO() =
     FriendshipDTO(

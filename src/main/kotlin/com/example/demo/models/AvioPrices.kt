@@ -12,10 +12,6 @@ data class AvioPrices(
     @Column(name = "id")
     var id: Int? = null,
 
-    @ManyToOne(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
-    @JoinColumn(name = "avio_company")
-    var avioCompany: AvioCompany? = null,
-
     @Version
     var version: Long? = null,
 
@@ -24,7 +20,11 @@ data class AvioPrices(
 
     @Column(name = "price")
     var price: Float = 0.toFloat()
-)
+) {
+    @ManyToOne(cascade = [CascadeType.PERSIST], fetch = FetchType.EAGER)
+    @JoinColumn(name = "avio_company")
+    var avioCompany: AvioCompany? = null
+}
 
 fun AvioPrices.toDTO() =
     AvioPricesDTO(

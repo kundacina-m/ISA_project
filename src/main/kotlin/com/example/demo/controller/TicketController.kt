@@ -21,7 +21,7 @@ import javax.transaction.Transactional
 
 @CrossOrigin(origins = ["http://localhost:4200"])
 @RestController
-@RequestMapping(value = ["tickets"])
+@RequestMapping(value = ["api/tickets"])
 class TicketController {
 
     @Autowired
@@ -74,6 +74,12 @@ class TicketController {
             isReserved = false
             flight = flightFromTicket
         }
+
+        val ticketss = mutableSetOf<Ticket>()
+        ticketss.addAll(flightFromTicket.tickets)
+        ticketss.add(ticket)
+
+        flightService.save(flightFromTicket)
 
         service.save(ticket)
 

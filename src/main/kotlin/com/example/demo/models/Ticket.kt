@@ -12,10 +12,6 @@ data class Ticket(
     @Column(name = "id")
     var id: Int? = null,
 
-    @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
-    @JoinColumn(name = "flight")
-    var flight: Flight? = null,
-
     @Version
     var version: Long? = null,
 
@@ -39,7 +35,11 @@ data class Ticket(
 
     @Column(name = "reserved", columnDefinition = "boolean default false")
     var isReserved: Boolean = false
-)
+) {
+    @ManyToOne(cascade = [CascadeType.REMOVE], fetch = FetchType.EAGER)
+    @JoinColumn(name = "flight")
+    var flight: Flight? = null
+}
 
 fun Ticket.toDTO() =
     TicketDTO(
